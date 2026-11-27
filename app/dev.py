@@ -225,3 +225,10 @@ def results(ver: str):
     if not os.path.exists(path):
         raise HTTPException(404, "결과 파일이 없습니다. 먼저 평가를 실행하세요")
     return json.load(open(path, encoding="utf-8"))
+
+    # ---- Lab 10: 에이전트 루프 메시지 흐름 ----
+@router.post("/agent")
+def agent(body: TextIn):
+    if not body.text.strip() or body.text.startswith("-"):
+        raise HTTPException(400, "질문을 입력하세요 ('-' 로 시작할 수 없습니다)")
+    return _py(["-m", "app.agent_demo", body.text, "--show-messages"])
